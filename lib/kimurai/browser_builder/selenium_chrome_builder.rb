@@ -47,9 +47,8 @@ module Kimurai::BrowserBuilder
           ip, port, type, user, password = proxy_string.split(":")
 
           if %w(http socks5).include?(type)
-              driver_options.args << "--proxy-server=#{type}://#{user}:#{password}@#{ip}:#{port}"
-              logger.debug "BrowserBuilder (selenium_chrome): enabled #{type} proxy, ip: #{ip}, port: #{port}"
-            end
+            driver_options.args << "--proxy-server=#{type}://#{user}:#{password}@#{ip}:#{port}"
+            logger.debug "BrowserBuilder (selenium_chrome): enabled #{type} proxy, ip: #{ip}, port: #{port}"
           else
             logger.error "BrowserBuilder (selenium_chrome): wrong type of proxy: #{type}, skipped"
           end
