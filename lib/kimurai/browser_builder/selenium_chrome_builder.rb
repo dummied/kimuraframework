@@ -47,7 +47,7 @@ module Kimurai::BrowserBuilder
           ip, port, type, user, password = proxy_string.split(":")
 
           if %w(http socks5).include?(type)
-            driver_options.args << "--proxy-server=#{type}://#{user}:#{password}@#{ip}:#{port}"
+            driver_options.args << "--proxy-server=#{type}://#{ip}:#{port}"
             logger.debug "BrowserBuilder (selenium_chrome): enabled #{type} proxy, ip: #{ip}, port: #{port}"
           else
             logger.error "BrowserBuilder (selenium_chrome): wrong type of proxy: #{type}, skipped"
@@ -116,6 +116,10 @@ module Kimurai::BrowserBuilder
 
         chromedriver_path = Kimurai.configuration.chromedriver_path || "/usr/local/bin/chromedriver"
         service = Selenium::WebDriver::Service.chrome(path: chromedriver_path)
+        if user && password
+          service.devtools.new
+          service.register(username: user, password: password)
+        end
         Capybara::Selenium::Driver.new(app, browser: :chrome, options: driver_options, service: service)
       end
 
