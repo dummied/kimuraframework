@@ -116,11 +116,12 @@ module Kimurai::BrowserBuilder
 
         chromedriver_path = Kimurai.configuration.chromedriver_path || "/usr/local/bin/chromedriver"
         service = Selenium::WebDriver::Service.chrome(path: chromedriver_path)
+        driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: driver_options, service: service)
         if user && password
-          service.devtools.new
-          service.register(username: user, password: password)
+          driver.devtools.new
+          driver.register(username: user, password: password)
         end
-        Capybara::Selenium::Driver.new(app, browser: :chrome, options: driver_options, service: service)
+        driver
       end
 
       # Create browser instance (Capybara session)
